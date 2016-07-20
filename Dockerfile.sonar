@@ -1,0 +1,17 @@
+FROM docker.io/centos:latest
+MAINTAINER  kyun <kyun@t3q.com>
+
+RUN yum install -y java-1.8.0-openjdk net-tools wget openssh-server unzip
+RUN ssh-keygen -A
+RUN echo "root:cloud3336" | chpasswd
+
+RUN adduser sonar
+RUN echo "sonar:cloud3336" | chpasswd
+RUN su - sonar -c "wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-5.5.zip -O /home/sonar/sonarqube-5.5.zip"
+RUN su - sonar -c "unzip /home/sonar/sonarqube-5.5.zip"
+
+EXPOSE 22
+EXPOSE 9000
+
+CMD ["/usr/sbin/sshd","-D"]
+
